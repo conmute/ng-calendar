@@ -37,11 +37,12 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 For calendar appointments we should do:
 
-- [] Routes: Add root
+- [v] Routes: Add root
 
-* [] Create a canvas on which we can display appointments
+  - [v] Create a canvas on which we can display appointments
+  - [] Make sure to use lazy load, for a route and for a component as well…
 
-- [] Routes: Render canvas component in the root page
+- [] Render canvas component in the root page
 
 * [] Move appointments start time by drag-n-dropping it on canvas
 * [] Add a preview dialog \w `X` button to delete an appointments

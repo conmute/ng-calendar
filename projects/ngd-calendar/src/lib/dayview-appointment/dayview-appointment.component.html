@@ -1,0 +1,11 @@
+<div
+  class="example-box"
+  cdkDragBoundary=".example-boundary"
+  cdkDrag
+  cdkDragLockAxis="y"
+  [cdkDragFreeDragPosition]="{ y: 100, x: 0 }"
+  matRipple
+  [style.height]="'100px'"
+>
+  <ng-content></ng-content>
+</div>

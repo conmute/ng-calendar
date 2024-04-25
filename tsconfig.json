@@ -9,6 +9,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
+    "paths": {
+      "ngd-calendar": [
+        "./dist/ngd-calendar"
+      ]
+    },
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,

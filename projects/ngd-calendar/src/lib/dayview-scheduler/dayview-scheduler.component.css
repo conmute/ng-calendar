@@ -1,0 +1,8 @@
+.example-boundary {
+  width: 400px;
+  height: calc((24 - 8) * 60px);
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  border: dotted #ccc 2px;
+}
