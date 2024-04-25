@@ -45,7 +45,7 @@ For calendar appointments we should do:
 - [v] Render canvas component in the root page
 
 * [v] Move appointments start time by drag-n-dropping it on canvas
-* [] Add a preview dialog \w `X` button to delete an appointments
-* [] Select current day, using angular date picker from material
-* [] Show list of all appointments, so we can know which days we can look up for…
-* [] Add a `Create` button to create appointment for given day
+* [v] Add a preview dialog \w `X` button to delete an appointments
+* [v] Select current day, using angular date picker from material
+* [v] Show list of all appointments, so we can know which days we can look up for…
+* [v] Add a `Create` button to create appointment for given day
