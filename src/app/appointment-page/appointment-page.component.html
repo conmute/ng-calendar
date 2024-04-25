@@ -1,7 +1,18 @@
-<form [formGroup]="apppointmentForm" class="example-form">
+<form
+  [formGroup]="apppointmentForm"
+  class="example-form"
+  (ngSubmit)="handleSubmit()"
+>
   <h1>
     {{ itemId ? "Edit" : "Create" }} appointment
-    <a mat-flat-button color="warn" *ngIf="!!itemId"> Delete </a>
+    <a
+      mat-flat-button
+      color="warn"
+      *ngIf="!!itemId"
+      (click)="handleDelete(itemId)"
+    >
+      Delete
+    </a>
   </h1>
 
   <mat-form-field>
@@ -38,5 +49,7 @@
     />
   </mat-form-field>
 
-  <button mat-button color="primary">Create</button>
+  <button mat-button color="primary" [disabled]="apppointmentForm.invalid">
+    Create
+  </button>
 </form>

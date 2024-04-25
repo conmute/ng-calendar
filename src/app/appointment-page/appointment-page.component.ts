@@ -16,7 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route, Router, RouterModule } from '@angular/router';
 
 import { Appointment, AppointmentsService } from '../appointments.service';
 import { CommonModule } from '@angular/common';
@@ -60,6 +60,7 @@ class DateTimeValidator {
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
   ],
   templateUrl: './appointment-page.component.html',
   styleUrl: './appointment-page.component.css',
@@ -91,6 +92,7 @@ export class AppointmentPageComponent implements OnInit {
   });
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private appointmentService: AppointmentsService,
   ) {}
@@ -114,5 +116,58 @@ export class AppointmentPageComponent implements OnInit {
   handleMatSelect($event: MatDatepickerInputEvent<Date>) {
     if (!$event.value) return;
     // this.handleSelect?.emit($event.value);
+  }
+
+  async handleDelete(id: string) {
+    const appointment = await this.appointmentService.byId(id);
+    if (!appointment) return;
+    if (confirm(`Delete appointment: ${appointment.title}`)) {
+      this.appointmentService.remove(id);
+      this.router.navigate(['/']);
+    }
+  }
+
+  handleSubmit() {
+    if (this.apppointmentForm.invalid && !this.apppointmentForm.pristine) {
+      return;
+    }
+    const formData = this.apppointmentForm.value;
+    // .getRawValue();
+    if (
+      !formData.duration ||
+      !formData.startDate ||
+      !formData.startTime ||
+      !formData.title
+    ) {
+      return;
+    }
+    const startDate = new Date(formData.startDate);
+    startDate.setHours(
+      parseInt(formData.startTime.split(':')[0]),
+      parseInt(formData.startTime.split(':')[1]),
+      parseInt(formData.startTime.split(':')[2]) || 0,
+    );
+    if (this.itemId) {
+      this.appointmentService.update(this.itemId, {
+        title: formData.title,
+        startDate,
+        durationMinutes: formData.duration,
+      });
+    }
+    if (!this.itemId) {
+      console.log({
+        id: window.crypto.randomUUID(),
+        title: formData.title,
+        startDate,
+        durationMinutes: formData.duration,
+      });
+      this.appointmentService.add({
+        id: window.crypto.randomUUID(),
+        title: formData.title,
+        startDate,
+        durationMinutes: formData.duration,
+      });
+    }
+    this.router.navigate(['/']);
   }
 }
