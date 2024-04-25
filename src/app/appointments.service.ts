@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, switchMap } from 'rxjs';
 
 import { initialAppointmentsData } from './data';
 
@@ -97,6 +97,20 @@ export class AppointmentsService {
         return list.filter((item) => {
           return isSameCalendarDay(item.startDate, checkDay);
         });
+      }),
+    );
+  }
+
+  observeByDay(checkDay$: Observable<Date>) {
+    return checkDay$.pipe(
+      switchMap((selectedDay) => {
+        return this.appointments.pipe(
+          map((list) => {
+            return list.filter((item) => {
+              return isSameCalendarDay(item.startDate, selectedDay);
+            });
+          }),
+        );
       }),
     );
   }

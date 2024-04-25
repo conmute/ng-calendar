@@ -1,5 +1,12 @@
 <section>
-  <h1>Todays appointments:</h1>
+  <h1>Appointments:</h1>
+
+  <div>
+    <ng-template #greettemp></ng-template>
+  </div>
+
+  <p *ngIf="loadingAsyncComponent">Loading…</p>
+  <hr />
 
   <lib-dayview-scheduler>
     <ng-container *ngFor="let item of appointmentsMeta$ | async; index as i">

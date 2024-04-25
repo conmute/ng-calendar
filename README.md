@@ -40,11 +40,11 @@ For calendar appointments we should do:
 - [v] Routes: Add root
 
   - [v] Create a canvas on which we can display appointments
-  - [] Make sure to use lazy load, for a route and for a component as well…
+  - [v] Make sure to use lazy load, for a route and for a component as well…
 
-- [] Render canvas component in the root page
+- [v] Render canvas component in the root page
 
-* [] Move appointments start time by drag-n-dropping it on canvas
+* [v] Move appointments start time by drag-n-dropping it on canvas
 * [] Add a preview dialog \w `X` button to delete an appointments
 * [] Select current day, using angular date picker from material
 * [] Show list of all appointments, so we can know which days we can look up for…

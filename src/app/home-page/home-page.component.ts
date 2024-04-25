@@ -1,15 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import {
   DayviewSchedulerComponent,
   DayviewAppointmentComponent,
 } from 'ngd-calendar';
 import { Appointment, AppointmentsService } from '../appointments.service';
-import { Observable, firstValueFrom, map } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, map } from 'rxjs';
+
+// Set start time to 8 AM for example, usual schedule time availibility
+const STARTING_HOURS = 8;
 
 const startDayTime = new Date();
-startDayTime.setHours(8, 0, 0, 0); // Set start time to 8 AM, usual schedule time availibility
-
+startDayTime.setHours(STARTING_HOURS, 0, 0, 0);
 const reprcs = <T>(
   item: { data: { id: string }; start: number; duration: number } & T,
   i: number,
@@ -59,27 +61,67 @@ type AppointmentMeta = {
 export class HomePageComponent {
   appointmentsMeta$: Observable<AppointmentMeta[]>;
 
-  constructor(private appointmentsService: AppointmentsService) {
-    this.appointmentsMeta$ = appointmentsService.byDay(new Date()).pipe(
-      map((list) => {
-        return list
-          .map((item) => {
-            const startPosition =
-              (item.startDate.getHours() - 8) * 60 +
-              item.startDate.getMinutes();
-            const durationHeight = item.durationMinutes;
-            return {
-              data: item,
-              start: startPosition,
-              duration: durationHeight,
-              count: 1,
-              padleft: 0,
-            };
-          })
-          .sort((a, b) => a.start - b.start)
-          .map(reprcs);
-      }),
+  @ViewChild('greettemp', { read: ViewContainerRef })
+  private greetviewcontainerref?: ViewContainerRef;
+
+  loadingAsyncComponent = false;
+
+  selectedDate = new BehaviorSubject(new Date());
+
+  constructor(
+    private appointmentsService: AppointmentsService,
+    // private vcref: ViewContainerRef,
+  ) {
+    // this.appointmentsMeta$ = appointmentsService.byDay(new Date()).pipe(
+    this.appointmentsMeta$ = appointmentsService
+      .observeByDay(this.selectedDate)
+      .pipe(
+        map((list) => {
+          return list
+            .map((item) => {
+              const startPosition =
+                (item.startDate.getHours() - STARTING_HOURS) * 60 +
+                item.startDate.getMinutes();
+              const durationHeight = item.durationMinutes;
+              return {
+                data: item,
+                start: startPosition,
+                duration: durationHeight,
+                count: 1,
+                padleft: 0,
+              };
+            })
+            .sort((a, b) => a.start - b.start)
+            .map(reprcs);
+        }),
+      );
+    this.loadAsyncComponent();
+  }
+
+  async loadAsyncComponent() {
+    this.loadingAsyncComponent = false;
+    const { HomeCurrentDateComponent } = await import(
+      './home-current-date/home-current-date.component'
     );
+    this.loadingAsyncComponent = false;
+    if (!HomeCurrentDateComponent) {
+      throw new Error('Failed to load component!');
+    }
+    this.greetviewcontainerref?.clear();
+    const greetcomp = this.greetviewcontainerref?.createComponent(
+      HomeCurrentDateComponent,
+    );
+    if (!greetcomp) {
+      throw new Error('Failed to instantiace component…');
+    }
+    greetcomp.instance.handleSelect?.subscribe((selectedDate) => {
+      this.selectedDate.next(selectedDate);
+      console.log({ selectedDate });
+    });
+    greetcomp.instance.selectedDate = new Date();
+    // this.vcref.clear();
+    // const greetcomp = this.vcref.createComponent(HomeCurrentDateComponent);
+    console.log(greetcomp?.instance);
   }
 
   async handleAppointmentStartChange(id: string, newPosition: number) {
