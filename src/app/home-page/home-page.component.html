@@ -2,6 +2,17 @@
   <h1>Todays appointments:</h1>
 
   <lib-dayview-scheduler>
-    <lib-dayview-appointment> A thing or two… </lib-dayview-appointment>
+    <ng-container *ngFor="let item of appointments; index as i">
+      <lib-dayview-appointment
+        [start]="item.start"
+        [padleft]="item.padleft"
+        [count]="item.count"
+        [duration]="item.duration"
+        (startChanged)="handleAppointmentStartChange(item.id, $event)"
+        (startChanging)="handleAppointmentStartHint(item.id, $event)"
+      >
+        {{ item.title }}
+      </lib-dayview-appointment>
+    </ng-container>
   </lib-dayview-scheduler>
 </section>
