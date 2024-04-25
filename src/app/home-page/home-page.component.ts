@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import {
   DayviewSchedulerComponent,
   DayviewAppointmentComponent,
 } from 'ngd-calendar';
 import { Appointment, AppointmentsService } from '../appointments.service';
 import { BehaviorSubject, Observable, firstValueFrom, map } from 'rxjs';
+import { Router, RouterModule } from '@angular/router';
 
 // Set start time to 8 AM for example, usual schedule time availibility
 const STARTING_HOURS = 8;
@@ -54,6 +56,8 @@ type AppointmentMeta = {
     DayviewSchedulerComponent,
     DayviewAppointmentComponent,
     CommonModule,
+    MatButtonModule,
+    RouterModule,
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css',
@@ -69,6 +73,7 @@ export class HomePageComponent {
   selectedDate = new BehaviorSubject(new Date());
 
   constructor(
+    private router: Router,
     private appointmentsService: AppointmentsService,
     // private vcref: ViewContainerRef,
   ) {
@@ -114,14 +119,13 @@ export class HomePageComponent {
     if (!greetcomp) {
       throw new Error('Failed to instantiace component…');
     }
+    // this.vcref.clear();
+    // const greetcomp = this.vcref.createComponent(HomeCurrentDateComponent);
     greetcomp.instance.handleSelect?.subscribe((selectedDate) => {
       this.selectedDate.next(selectedDate);
       console.log({ selectedDate });
     });
     greetcomp.instance.selectedDate = new Date();
-    // this.vcref.clear();
-    // const greetcomp = this.vcref.createComponent(HomeCurrentDateComponent);
-    console.log(greetcomp?.instance);
   }
 
   async handleAppointmentStartChange(id: string, newPosition: number) {
@@ -141,5 +145,22 @@ export class HomePageComponent {
 
   handleAppointmentStartHint(id: string, deltaNumber: number) {
     console.log(id, { deltaNumber });
+  }
+
+  handleAppointmentAction(id: string, $event: string) {
+    const actionStrategy: Record<string, () => void> = {
+      edit: () => {
+        this.router.navigate(['/appointment', id]);
+      },
+      delete: async () => {
+        const appointment = await this.appointmentsService.byId(id);
+        if (!appointment) return;
+        if (confirm(`Delete appointment: ${appointment.title}`)) {
+          this.appointmentsService.remove(id);
+        }
+      },
+    };
+    const currentCase = actionStrategy[$event];
+    if (currentCase) currentCase();
   }
 }

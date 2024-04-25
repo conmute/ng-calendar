@@ -1,0 +1,42 @@
+<form [formGroup]="apppointmentForm" class="example-form">
+  <h1>
+    {{ itemId ? "Edit" : "Create" }} appointment
+    <a mat-flat-button color="warn" *ngIf="!!itemId"> Delete </a>
+  </h1>
+
+  <mat-form-field>
+    <mat-label>Select date</mat-label>
+    <input
+      matInput
+      formControlName="startDate"
+      [value]="selectedDate"
+      [matDatepicker]="picker"
+      (dateChange)="handleMatSelect($event)"
+    />
+    <mat-hint>DD/MM/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker panelClass="example-month-picker"> </mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Title</mat-label>
+    <input matInput placeholder="ex. Workout" formControlName="title" />
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Start time</mat-label>
+    <input matInput placeholder="ex. 16:00" formControlName="startTime" />
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Duration in minutes (range: 15m-2h)</mat-label>
+    <input
+      matInput
+      placeholder="ex. 30"
+      formControlName="duration"
+      type="number"
+    />
+  </mat-form-field>
+
+  <button mat-button color="primary">Create</button>
+</form>

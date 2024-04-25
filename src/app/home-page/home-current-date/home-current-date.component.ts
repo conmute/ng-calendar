@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import {
-  MatDatepicker,
   MatDatepickerInputEvent,
   MatDatepickerModule,
 } from '@angular/material/datepicker';
@@ -30,10 +29,7 @@ export class HomeCurrentDateComponent {
   @Input() selectedDate?: Date;
   @Output() handleSelect = new EventEmitter<Date>();
 
-  handleMatSelect(
-    $event: MatDatepickerInputEvent<Date>,
-    _datepicker: MatDatepicker<Date>,
-  ) {
+  handleMatSelect($event: MatDatepickerInputEvent<Date>) {
     if (!$event.value) return;
     this.handleSelect?.emit($event.value);
   }

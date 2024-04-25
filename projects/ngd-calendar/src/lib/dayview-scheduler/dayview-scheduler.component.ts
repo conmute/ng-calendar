@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { CdkDrag } from '@angular/cdk/drag-drop';
 
 import { DayviewAppointmentComponent } from '../dayview-appointment/dayview-appointment.component';
 

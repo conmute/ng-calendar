@@ -91,6 +91,11 @@ export class AppointmentsService {
     });
   }
 
+  async byId(id: string) {
+    const appointments = this.$appointments.getValue();
+    return appointments.find((item) => item.id === id);
+  }
+
   byDay(checkDay: Date) {
     return this.appointments.pipe(
       map((list) => {

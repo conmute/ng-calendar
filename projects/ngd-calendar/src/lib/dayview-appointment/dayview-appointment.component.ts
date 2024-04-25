@@ -31,8 +31,9 @@ export class DayviewAppointmentComponent {
   @Input() count: number = 1;
   @Output() startChanged = new EventEmitter<number>();
   @Output() startChanging = new EventEmitter<number>();
+  @Output() handleAction = new EventEmitter<'edit' | 'delete'>();
 
-  constructor(@Optional() private parent: DayviewSchedulerComponent) {
+  constructor(@Optional() parent: DayviewSchedulerComponent) {
     if (!parent) {
       throw new Error('ChildComponent must be rendered within ParentComponent');
     }
@@ -45,5 +46,9 @@ export class DayviewAppointmentComponent {
   drop($event: CdkDragEnd<unknown>) {
     console.log($event);
     this.startChanged.emit((this.start || 0) + $event.distance.y);
+  }
+
+  triggerAction(action: 'edit' | 'delete') {
+    this.handleAction.emit(action);
   }
 }

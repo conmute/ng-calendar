@@ -1,5 +1,11 @@
 <section>
-  <h1>Appointments:</h1>
+  <h1>
+    Appointments:
+
+    <a mat-flat-button color="primary" [routerLink]="['appointment/add']">
+      Create
+    </a>
+  </h1>
 
   <div>
     <ng-template #greettemp></ng-template>
@@ -17,6 +23,7 @@
         [duration]="item.duration"
         (startChanged)="handleAppointmentStartChange(item.data.id, $event)"
         (startChanging)="handleAppointmentStartHint(item.data.id, $event)"
+        (handleAction)="handleAppointmentAction(item.data.id, $event)"
       >
         <small>
           {{ item.data.title }} |
