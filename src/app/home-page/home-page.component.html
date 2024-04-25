@@ -2,16 +2,19 @@
   <h1>Todays appointments:</h1>
 
   <lib-dayview-scheduler>
-    <ng-container *ngFor="let item of appointments; index as i">
+    <ng-container *ngFor="let item of appointmentsMeta$ | async; index as i">
       <lib-dayview-appointment
         [start]="item.start"
         [padleft]="item.padleft"
         [count]="item.count"
         [duration]="item.duration"
-        (startChanged)="handleAppointmentStartChange(item.id, $event)"
-        (startChanging)="handleAppointmentStartHint(item.id, $event)"
+        (startChanged)="handleAppointmentStartChange(item.data.id, $event)"
+        (startChanging)="handleAppointmentStartHint(item.data.id, $event)"
       >
-        {{ item.title }}
+        <small>
+          {{ item.data.title }} |
+          <span>{{ item.data.startDate | date: "shortTime" }}</span>
+        </small>
       </lib-dayview-appointment>
     </ng-container>
   </lib-dayview-scheduler>

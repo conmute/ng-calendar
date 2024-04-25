@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { AppointmentsService } from './appointments.service';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,8 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'ng-calendar';
+
+  constructor(appointmentsService: AppointmentsService) {
+    appointmentsService.loadData().then(console.log);
+  }
 }
